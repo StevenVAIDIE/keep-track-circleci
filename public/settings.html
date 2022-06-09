@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <style>
+            body {
+                margin: 0;
+            }
+            body,
+            input,
+            button,
+            select,
+            textarea {
+                font-family: 'Lato';
+                font-size: 13px;
+            }
+            * {
+                box-sizing: border-box;
+            }
+        </style>
+        <title>Keep track CircleCI settings</title>
+    </head>
+    <body>
+        <form>
+            <label for="circleCiApiToken">Circle CI API Token</label>
+            <input type="text" id="circleCiApiToken">
+            <button type="submit">Save</button>
+        </form>
+        <script src="settings.js"></script>
+    </body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "strict": false,
+    "lib": [
+      "es6",
+      "dom",
+      "es2015.promise"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react"
+  }
+}

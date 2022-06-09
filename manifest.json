@@ -1,0 +1,41 @@
+{
+  "manifest_version": 2,
+  "name": "Keep track CircleCI",
+  "description": "Monitor your branches build status on CircleCI",
+  "version": "1.0.0",
+  "icons": {
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "browser_action": {
+    "default_icon": {
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    },
+    "default_popup": "popup.html",
+    "default_title": "Keep track CircleCI"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{f9717bb3-de34-43c6-9862-e37901b8b2cd}"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*/*/pull/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "options_ui": {
+    "page": "settings.html"
+  },
+  "permissions": [
+    "https://github.com/*",
+    "https://circleci.com/*",
+    "storage",
+    "alarms"
+  ]
+}
