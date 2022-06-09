@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import {MonitoredWorkflow} from "../components/Popup/MonitoredWorkflow";
-import {useWorkflowsToMonitor} from "../hooks/useWorkflowsToMonitor";
+import {MonitoredWorkflow} from "../components";
+import {useWorkflowsToMonitor} from "../hooks";
 
 const Container = styled.div`
   display: flex;

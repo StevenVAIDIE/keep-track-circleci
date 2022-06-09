@@ -1,10 +1,9 @@
 import React, {useState} from "react";
-import {IconButton} from "../IconButton";
+import {IconButton, StatusPill} from "../../components";
 import {CircleciIcon, GithubIcon, MuteIcon} from "../../icons";
-import {StatusPill} from "../StatusPill";
+import {removeBranch, removeWorkflowProject, Workflow, workflowExist} from "../../model";
 import {BranchList} from "./BranchList";
 import {WorkflowList} from "./WorkflowList";
-import {removeBranch, removeWorkflowProject, Workflow, workflowExist} from "../../model/workflow";
 
 type MonitoredWorkflowProps = {
   workflows: Workflow[];
@@ -58,12 +57,12 @@ const MonitoredWorkflow = ({workflows, onWorkflowsChange}: MonitoredWorkflowProp
               <IconButton icon={<MuteIcon/>} onClick={() => handleRemoveWorkflowProject(selectedWorkflow.id, project.id)}/>
               <IconButton
                 icon={<GithubIcon/>}
-                href={`https://github.com/${project.group_name}/${project.name}/pull/${project.pr_id}`}
+                href={`https://github.com/${project.organisation_name}/${project.name}/pull/${project.pr_id}`}
                 target="_blank"
               />
               <IconButton
                 icon={<CircleciIcon />}
-                href={`https://app.circleci.com/pipelines/github/${project.group_name}/${project.name}/${project.run_id}/workflows/${project.workflow_id}`}
+                href={`https://app.circleci.com/pipelines/github/${project.organisation_name}/${project.name}/${project.run_id}/workflows/${project.workflow_id}`}
                 target="_blank"
               />
             </WorkflowList.Item>

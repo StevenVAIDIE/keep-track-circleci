@@ -10,10 +10,10 @@
   },
   "type": "module",
   "scripts": {
-    "extension:build": "yarn run lib:build && yarn run web-ext build --source-dir dist --artifacts-dir dist --overwrite-dest",
-    "extension:lint": "yarn run lib:build && yarn run web-ext lint --source-dir dist",
-    "extension:publish": "yarn run web-ext sign --source-dir dist",
-    "extension:run": "web-ext run --source-dir dist",
+    "extension:build": "yarn run lib:build && web-ext build --source-dir dist --artifacts-dir dist --overwrite-dest",
+    "extension:lint": "yarn run lib:build && web-ext lint --source-dir dist",
+    "extension:publish": "web-ext sign --source-dir dist",
+    "extension:run": "web-ext run --source-dir dist --browser-console",
     "lib:build": "node ./build.js",
     "lib:build:watch": "node ./build.js --watch"
   },

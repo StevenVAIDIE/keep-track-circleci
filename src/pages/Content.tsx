@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
-import {useCircleCiApprovalSteps} from "../hooks/useCircleCiApprovalSteps";
-import {GithubApproveButton} from "../components/Content/GithubApproveButton";
+import {useCircleCiApprovalSteps} from "../hooks";
+import {GithubApproveButton} from "../components";
 
 const Content = () => {
   const actions = document.getElementsByClassName('status-actions');

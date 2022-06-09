@@ -2,7 +2,7 @@ type Status = 'success' | 'running' | 'stopped' | 'failed' | 'retried';
 
 type Project = {
   id: string;
-  group_name: string;
+  organisation_name: string;
   name: string;
   run_id: number;
   pr_id: number;

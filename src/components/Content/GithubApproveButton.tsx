@@ -1,6 +1,6 @@
 import React from 'react';
 import browser from "webextension-polyfill";
-import {useCircleCiApi} from "../../hooks/useCircleCiApi";
+import {useCircleCiApi} from "../../hooks";
 
 type GithubApproveButtonProps = {
   workflowId: string;

@@ -10,7 +10,7 @@ const useWorkflowsToMonitor = () => {
       projects: [
         {
           id: '19283',
-          group_name: 'akeneo',
+          organisation_name: 'akeneo',
           name: 'pim-enterprise-dev',
           run_id: 12,
           pr_id: 1234,
@@ -32,7 +32,7 @@ const useWorkflowsToMonitor = () => {
       projects: [
         {
           id: '92383',
-          group_name: 'akeneo',
+          organisation_name: 'akeneo',
           name: 'pim-enterprise-dev',
           run_id: 123,
           pr_id: 12342,
@@ -48,7 +48,7 @@ const useWorkflowsToMonitor = () => {
         },
         {
           id: '19282',
-          group_name: 'akeneo',
+          organisation_name: 'akeneo',
           name: 'pim-community-dev',
           run_id: 1232,
           pr_id: 12342,

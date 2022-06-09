@@ -1,6 +1,6 @@
 import React, {Ref} from 'react';
 import styled from 'styled-components';
-import {Status} from "../model/workflow";
+import {Status} from "../model";
 
 const getColorForStatus = (status: Status) => {
   const statusColor = {

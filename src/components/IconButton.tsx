@@ -1,6 +1,6 @@
 import React, {ReactElement, Ref} from "react";
 import styled from 'styled-components';
-import {IconProps} from "../icons/IconProps";
+import {IconProps} from "../icons";
 
 const IconButtonContainer = styled.button`
   display: inline-flex;
