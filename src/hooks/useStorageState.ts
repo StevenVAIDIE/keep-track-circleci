@@ -1,7 +1,7 @@
 import browser from 'webextension-polyfill'
 import { useState, useEffect } from 'react'
 
-function isDifferent (a, b) {
+function isDifferent (a: any, b: any): boolean {
   if (typeof a !== typeof b) {
     return true
   }
@@ -14,16 +14,17 @@ function isDifferent (a, b) {
   return a !== b
 }
 
-function arrayIsDifferent (a, b) {
+function arrayIsDifferent (a: any, b: any): boolean {
   if (a.length !== b.length) {
     return true
   }
-  return a.some((e, i) => {
+
+  return a.some((e: any, i: string) => {
     return isDifferent(e, b[i])
   })
 }
 
-function objectIsDifferent (a, b) {
+function objectIsDifferent(a: any, b: any): boolean {
   const keysA = Object.keys(a)
   const keysB = Object.keys(b)
 
@@ -31,7 +32,7 @@ function objectIsDifferent (a, b) {
     return true
   }
 
-  return keysA.some((key) => {
+  return keysA.some((key: string) => {
     return isDifferent(a[key], b[key])
   })
 }
@@ -48,7 +49,7 @@ const useStorageState = <StateType>(initialValue: StateType, key: string) => {
     }
   })
 
-  const storageOnChange = (storedValue, area) => {
+  const storageOnChange = (storedValue: any, area: string) => {
     if ('sync' !== area) {
       return
     }
@@ -62,7 +63,7 @@ const useStorageState = <StateType>(initialValue: StateType, key: string) => {
     }
   }
 
-  const changeValue = (value) => {
+  const changeValue = (value: StateType) => {
     browser.storage.sync.set({
       [key]: value
     })

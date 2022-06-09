@@ -1,10 +1,10 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import {createRoot} from 'react-dom/client';
 import {Settings} from './pages';
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root')!);
+root.render(
   <React.StrictMode>
     <Settings />
   </React.StrictMode>,
-  document.getElementById("root")
-)
+);

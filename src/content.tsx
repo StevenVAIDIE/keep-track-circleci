@@ -1,9 +1,14 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import {createRoot} from 'react-dom/client';
 import {Content} from './pages';
 
-const app = document.createElement('div');
-app.id = "keep-track-circleci-root";
-document.body.appendChild(app);
+const container = document.createElement('div');
+container.id = "keep-track-circleci-root";
+document.body.appendChild(container);
 
-ReactDOM.render(<Content />, app);
+const root = createRoot(container);
+root.render(
+  <React.StrictMode>
+    <Content />
+  </React.StrictMode>,
+);

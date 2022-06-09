@@ -1,36 +1,45 @@
-import React, {useMemo} from 'react';
-import {useCircleCiApprovalSteps} from "../hooks";
-import {GithubApproveButton} from "../components";
+import React from 'react';
+import {GithubPullRequestPage} from "../components";
+
+function isStringNumber(x: any): x is string {
+  return /^-?\d+$/.test(x);
+}
+
+function isString(x: any): x is string {
+  return typeof x === "string";
+}
 
 const Content = () => {
-  const actions = document.getElementsByClassName('status-actions');
-  const workflowIds = useMemo(() => {
-    const hrefs = Array.from(actions).map(action => action.getAttribute('href'));
-    const workflowIds = hrefs.map(href => new RegExp("https://circleci\.com/workflow-run/([^\?]+)", 'gm').exec(href ?? '')?.[1] ?? null);
-    const circleCiHrefs = workflowIds.filter((href): href is string => href !== null);
+  const currentUrl = location.href.toString();
+  const match = currentUrl.match(/https:\/\/github.com\/(?<organisationName>[a-zA-Z\-_]+)\/(?<projectName>[a-zA-Z\-_]+)\/pull\/(?<pullRequestId>[0-9]+)/);
+  if (null === match) {
+    console.log('unknown');
 
-    return Array.from(new Set(circleCiHrefs));
-  }, [actions]);
+    return null;
+  }
 
-  const [approvalSteps, refresh] = useCircleCiApprovalSteps(workflowIds);
+  const organisationName = match.groups?.organisationName;
+  const projectName = match.groups?.projectName;
+  const pullRequestId = match.groups?.pullRequestId;
+  const sourceBranchName = document.querySelector('.head-ref a.no-underline span.css-truncate-target')?.innerHTML ?? null;
+
+  if (
+    !isString(organisationName)
+    || !isString(projectName)
+    || !isStringNumber(pullRequestId)
+    || !isString(sourceBranchName)
+  ) {
+    throw Error('Cannot retrieve information for this page');
+  }
 
   return (
-    <>
-      <button onClick={refresh}>
-        Refresh
-      </button>
-      {approvalSteps.map((approvalStep) => (
-        <GithubApproveButton
-          key={approvalStep.approval_request_id}
-          workflowId={approvalStep.workflowId}
-          workflowName={approvalStep.workflowName}
-          stepName={approvalStep.name}
-          stepApprovalRequestId={approvalStep.approval_request_id}
-          onClick={refresh}
-        />
-      ))}
-    </>
-  )
+    <GithubPullRequestPage
+      organisationName={organisationName}
+      projectName={projectName}
+      pullRequestId={parseInt(pullRequestId)}
+      sourceBranchName={sourceBranchName}
+    />
+  );
 }
 
 export {Content}

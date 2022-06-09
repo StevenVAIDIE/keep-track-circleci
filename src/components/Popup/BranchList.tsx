@@ -18,6 +18,7 @@ const BranchItem = styled.div<{isSelected: boolean}>`
   gap: 5px;
 
   :hover {
+    cursor: pointer;
     border-left-color: #9452BA;
   }
 `;
