@@ -37,6 +37,7 @@
     "https://github.com/*",
     "https://circleci.com/*",
     "storage",
-    "alarms"
+    "alarms",
+    "notifications"
   ]
 }

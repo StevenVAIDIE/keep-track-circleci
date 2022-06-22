@@ -13,8 +13,6 @@ const Content = () => {
   const currentUrl = location.href.toString();
   const match = currentUrl.match(/https:\/\/github.com\/(?<organisationName>[a-zA-Z\-_]+)\/(?<projectName>[a-zA-Z\-_]+)\/pull\/(?<pullRequestId>[0-9]+)/);
   if (null === match) {
-    console.log('unknown');
-
     return null;
   }
 

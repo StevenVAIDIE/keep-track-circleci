@@ -21,8 +21,13 @@ const setUpBackgroundScript = () => {
     if (refreshing) {
       return;
     }
+
     try {
       refreshing = true;
+
+      return {
+        response: 'test'
+      }
     } finally {
       refreshing = false;
     }
@@ -39,7 +44,7 @@ function refreshOnUpdateAvailable() {
 /**
  * Refreshes pull requests when the extension is installed or updated.
  */
-const refreshOnUpdate = (triggerRefresh: () => Promise<void>) => {
+const refreshOnUpdate = (triggerRefresh: () => Promise<{response: string}>) => {
   browser.runtime.onInstalled.addListener((details) => {
     if (details.reason === "install") {
       browser.runtime.openOptionsPage();
@@ -47,7 +52,7 @@ const refreshOnUpdate = (triggerRefresh: () => Promise<void>) => {
   });
 }
 
-const refreshRegularly = (triggerRefresh: () => Promise<void>) => {
+const refreshRegularly = (triggerRefresh: () => Promise<{response: string}>) => {
   browser.alarms.create({periodInMinutes: 3});
   browser.alarms.onAlarm.addListener((alarm) => {
     console.debug("Alarm triggered", alarm);
@@ -55,11 +60,16 @@ const refreshRegularly = (triggerRefresh: () => Promise<void>) => {
   });
 }
 
-const refreshOnDemand = (triggerRefresh: () => Promise<void>) => {
+const refreshOnDemand = (triggerRefresh: () => Promise<{response: string}>) => {
   browser.runtime.onMessage.addListener((message, sender) => {
-    console.debug("Message received", message);
-    if (message.kind === "refresh") {
+    if (message.type === "refresh") {
       triggerRefresh().catch(console.error);
+      browser.notifications.create('Refresh job', {
+        type: 'list',
+        message: 'Workflows have been refreshed',
+        title: 'Keep track CircleCi',
+        iconUrl: 'icon-48.png'
+      });
     }
   });
 }

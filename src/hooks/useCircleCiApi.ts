@@ -20,7 +20,11 @@ type Workflow = {
 const useCircleCiApi = () => {
   const [circleciApiToken] = useStorageState<string>('', 'CIRCLECI_API_TOKEN');
   const fetchLastPipeline = async(organisationName: string, projectName: string, branchName: string) => {
-    const url = `https://circleci.com/api/v2/project/gh/${organisationName}/${projectName}/pipeline?branch=${branchName}`;
+    if (circleciApiToken === '') {
+      return null;
+    }
+
+    const url = `https://circleci.com/api/v2/project/github/${organisationName}/${projectName}/pipeline?branch=${branchName}`;
     const response = await fetch(url, {
       headers: {
         'Circle-Token': circleciApiToken,

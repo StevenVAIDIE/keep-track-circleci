@@ -1,16 +1,17 @@
 import React from 'react';
 import browser from "webextension-polyfill";
 import {useCircleCiApi} from "../../hooks";
+import {Button} from "../Button";
+import {CircleciIcon} from "../../icons";
 
 type GithubApproveButtonProps = {
   workflowId: string;
-  workflowName: string;
   stepName: string;
   stepApprovalRequestId: string;
   onClick: () => void;
 };
 
-const GithubApproveButton = ({onClick, stepApprovalRequestId, stepName, workflowId, workflowName}: GithubApproveButtonProps) => {
+const GithubApproveButton = ({onClick, stepApprovalRequestId, stepName, workflowId}: GithubApproveButtonProps) => {
   const circleCiApi = useCircleCiApi();
   const handleClick = async () => {
     await circleCiApi.approveStep(workflowId, stepApprovalRequestId);
@@ -24,9 +25,10 @@ const GithubApproveButton = ({onClick, stepApprovalRequestId, stepName, workflow
   }
 
   return (
-    <button onClick={handleClick}>
-      {`${workflowName} - ${stepName}`}
-    </button>
+    <Button onClick={handleClick}>
+      <CircleciIcon /> {/** TODO: Replace by StartIcon */}
+      {stepName}
+    </Button>
   )
 }
 
