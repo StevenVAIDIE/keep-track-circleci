@@ -26,7 +26,6 @@ const GithubApproveButton = ({onClick, stepApprovalRequestId, stepName, workflow
 
   return (
     <Button onClick={handleClick}>
-      <CircleciIcon /> {/** TODO: Replace by StartIcon */}
       {stepName}
     </Button>
   )

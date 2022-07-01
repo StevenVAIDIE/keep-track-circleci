@@ -18,6 +18,14 @@ const Sidebar = styled.nav<{isOpen: boolean}>`
   padding-right: 5px;
 `;
 
+const TabContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  gap: 10px;
+  overflow-y: auto;
+`;
+
 type GithubPullRequestPageProps = {
   organisationName: string;
   projectName: string;
@@ -46,7 +54,7 @@ const GithubPullRequestPage = ({organisationName, projectName, pullRequestId, so
               </TabBar.Tab>
             ))}
           </TabBar>
-          <div>
+          <TabContent>
             {activeWorkflow.steps.map(step => (
               <GithubApproveButton
                 key={step.approval_request_id}
@@ -56,7 +64,7 @@ const GithubPullRequestPage = ({organisationName, projectName, pullRequestId, so
                 onClick={refresh}
               />
             ))}
-          </div>
+          </TabContent>
         </>
       ): (
         <>No workflows have been found</>
