@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import {MonitoredWorkflow} from "../components";
-import {useWorkflowsToMonitor} from "../hooks";
+import {usePullRequestToMonitor} from "../hooks/usePullRequestToMonitor";
+import {MonitoredPullRequest} from "../components";
 
 const Container = styled.div`
   display: flex;
@@ -11,14 +11,14 @@ const Container = styled.div`
 `;
 
 const Popup = () => {
-  const [workflowsToMonitor, setWorkflowToMonitor] = useWorkflowsToMonitor();
+  const [pullRequestsToMonitor, setPullRequestsToMonitor] = usePullRequestToMonitor();
 
   return (
     <Container>
-      {workflowsToMonitor.length === 0 ? (
-        <>No workflow to monitor</>
+      {pullRequestsToMonitor.length === 0 ? (
+        <>You monitor no pull request</>
       ): (
-        <MonitoredWorkflow workflows={workflowsToMonitor} onWorkflowsChange={setWorkflowToMonitor}/>
+        <MonitoredPullRequest pullRequests={pullRequestsToMonitor} onPullRequestsChange={setPullRequestsToMonitor}/>
       )}
     </Container>
   );

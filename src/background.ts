@@ -11,7 +11,9 @@ const getCircleCiApiToken = async () => {
 };
 
 let refreshing = false;
+
 const setUpBackgroundScript = () => {
+  onMonitorPullRequest();
   refreshOnUpdateAvailable();
   refreshOnUpdate(triggerRefresh);
   refreshRegularly(triggerRefresh);
@@ -67,6 +69,20 @@ const refreshOnDemand = (triggerRefresh: () => Promise<{response: string}>) => {
       browser.notifications.create('Refresh job', {
         type: 'list',
         message: 'Workflows have been refreshed',
+        title: 'Keep track CircleCi',
+        iconUrl: 'icon-48.png'
+      });
+    }
+  });
+}
+
+
+function onMonitorPullRequest() {
+  browser.runtime.onMessage.addListener((message, sender) => {
+    if (message.type === "monitorPullRequest") {
+      browser.notifications.create('New job monitored', {
+        type: 'list',
+        message: 'New job monitored',
         title: 'Keep track CircleCi',
         iconUrl: 'icon-48.png'
       });

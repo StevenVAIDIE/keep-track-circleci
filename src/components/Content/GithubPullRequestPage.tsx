@@ -59,6 +59,10 @@ const GithubPullRequestPage = ({organisationName, projectName, pullRequestId, so
               <GithubApproveButton
                 key={step.approval_request_id}
                 workflowId={activeWorkflow.id}
+                organisationName={organisationName}
+                projectName={projectName}
+                pullRequestId={pullRequestId}
+                sourceBranchName={sourceBranchName}
                 stepName={step.name}
                 stepApprovalRequestId={step.approval_request_id}
                 onClick={refresh}

@@ -24,13 +24,13 @@ type WorkflowListProps = {
   children: ReactNode;
 }
 
-const WorkflowList = ({children}: WorkflowListProps) => {
+const PullRequestList = ({children}: WorkflowListProps) => {
   return (
     <WorkflowListContainer>{children}</WorkflowListContainer>
   )
 };
 
-WorkflowList.Spacer = Spacer;
-WorkflowList.Item = WorkflowItem;
+PullRequestList.Spacer = Spacer;
+PullRequestList.Item = WorkflowItem;
 
-export {WorkflowList};
+export {PullRequestList};

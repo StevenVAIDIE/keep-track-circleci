@@ -1,45 +1,45 @@
 type Status = 'success' | 'running' | 'stopped' | 'failed' | 'retried';
 
-type Project = {
-  id: string;
+type PullRequest = {
+  id: number;
   organisation_name: string;
-  name: string;
-  run_id: number;
-  pr_id: number;
-  status: Status;
-  workflow_id: string;
-  jobs: Job[]
+  project_name: string;
+  branch_name: string;
+  runs: Run[]
 };
 
-type Job = {
-  id: number,
-  name: string,
-  notify_on_finish: boolean;
+type Run = {
+  id: number;
+  workflow_id: string;
+  status: Status;
+  steps: Steps[];
+};
+
+type Steps = {
+  id: number;
+  name: string;
+  approval_request_id: string;
+};
+
+function groupPullRequestByBranch(pullRequests: PullRequest[]): {[branchName: string]: PullRequest[]} {
+  return pullRequests.reduce(function(accumulator, pullRequest) {
+    (accumulator[pullRequest.branch_name] = accumulator[pullRequest.branch_name] || []).push(pullRequest);
+
+    return accumulator;
+  }, {});
 }
 
-type Workflow = {
-  id: string;
-  branch_name: string;
-  projects: Project[];
+function removePullRequestsByBranch(pullRequests: PullRequest[], branchName: string) {
+  return pullRequests.filter(pullRequest => pullRequest.branch_name !== branchName);
 }
 
-const removeWorkflowProject = (workflows: Workflow[], workflowId: string, projectId: string): Workflow[] => {
-  const filteredWorkflows = workflows.map(workflow =>
-    workflow.id === workflowId
-    ? {...workflow, projects: workflow.projects.filter(project => project.id !== projectId)}
-    : workflow
+function removePullRequest(pullRequests: PullRequest[], pullRequestToRemove: PullRequest) {
+  return pullRequests.filter(pullRequest =>
+    pullRequest.id !== pullRequestToRemove.id
+    || pullRequest.branch_name !== pullRequestToRemove.branch_name
+    || pullRequest.organisation_name !== pullRequestToRemove.organisation_name
+    || pullRequest.project_name !== pullRequestToRemove.project_name
   );
-
-  return filteredWorkflows.filter(workflow => workflow.projects.length > 0);
 }
-
-const workflowExist = (workflows: Workflow[], workflowId: string) => {
-  return workflows.some(workflow => workflow.id === workflowId);
-}
-
-const removeBranch = (workflows: Workflow[], workflowId: string) => {
-  return workflows.filter(workflow => workflow.id !== workflowId);
-}
-
-export {workflowExist, removeBranch, removeWorkflowProject};
-export type {Status, Workflow}
+export {groupPullRequestByBranch, removePullRequestsByBranch, removePullRequest};
+export type {PullRequest, Status}
