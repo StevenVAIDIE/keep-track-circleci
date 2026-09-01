@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Keep track CircleCI",
   "description": "Monitor your branches build status on CircleCI",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "icons": {
     "48": "icon-48.png",
     "128": "icon-128.png"
