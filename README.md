@@ -1,46 +1,94 @@
-# Getting Started with Create React App
+# Keep Track CircleCI
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Extension de navigateur (Firefox) qui affiche en direct le statut des builds CircleCI de vos branches, directement sur GitHub et sur CircleCI.
 
-## Available Scripts
+![Capture d'écran de l'extension](docs/screenshot-placeholder.png)
+<!-- TODO: remplacer par une vraie capture d'écran du popup et/ou de l'overlay injecté sur GitHub/CircleCI -->
 
-In the project directory, you can run:
+## Fonctionnalités
 
-### `npm start`
+- Suivi automatique du statut des workflows CircleCI (succès, échec, en cours, en attente, arrêté, relancé) pour une liste de branches/PR suivies.
+- Injection d'un script de contenu sur `github.com` et `app.circleci.com` pour afficher le statut directement dans la page.
+- Popup d'extension listant les branches suivies, groupées, avec possibilité de les retirer.
+- Approbation des étapes manuelles ("hold") d'un workflow directement depuis l'extension.
+- Notifications navigateur sur changement de statut.
+- Mute/unmute par branche pour couper les notifications ponctuellement.
+- Page de réglages pour configurer le token API CircleCI (stocké en local, `storage` de l'extension).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Stack technique
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- React 18 + TypeScript
+- `styled-components` pour le style
+- `webextension-polyfill` pour l'API navigateur cross-browser
+- Bundling via `esbuild` (`build.js`), packaging/signing via `web-ext`
+- Manifest V2 (cible Firefox, voir `browser_specific_settings.gecko`)
 
-### `npm test`
+## Structure du projet
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+src/
+  background.ts       # service worker : polling CircleCI, notifications, alarms
+  content.tsx          # script injecté sur github.com / app.circleci.com
+  popup.tsx            # point d'entrée du popup
+  settings.tsx          # point d'entrée de la page de réglages
+  pages/                # composants racine Popup / Content / Settings
+  components/           # composants UI partagés
+  hooks/                # logique métier (appels API CircleCI, storage, etc.)
+  model/                # types et helpers sur PullRequest / Workflow / Status
+  icons/                # icônes SVG en composants React
+manifest.json           # manifest de l'extension (Manifest V2)
+build.js                 # script de build esbuild
+scripts/publish.sh       # lint + build + publication sur addons.mozilla.org
+```
 
-### `npm run build`
+## Prérequis
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Node.js et Yarn
+- Un token d'API CircleCI ([circleci.com/account/api](https://app.circleci.com/settings/user/tokens)) pour utiliser l'extension une fois installée
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Installation et développement
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+yarn install
+yarn lib:build
+```
 
-### `npm run eject`
+Cela génère le bundle de l'extension dans `dist/`. Pour rebuilder automatiquement à chaque changement :
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+yarn lib:build:watch
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Charger l'extension en local (Firefox)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+1. `yarn lib:build`
+2. Ouvrir `about:debugging#/runtime/this-firefox`
+3. "Charger un module complémentaire temporaire" → sélectionner `dist/manifest.json`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Ou directement lancer un Firefox avec l'extension chargée :
 
-## Learn More
+```bash
+yarn extension:run
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Configurer le token CircleCI
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Une fois l'extension chargée, ouvrir sa page de réglages (`settings.html`) et renseigner le token API CircleCI.
+
+## Scripts disponibles
+
+| Script | Description |
+| --- | --- |
+| `yarn lib:build` | Build de l'extension avec esbuild dans `dist/` |
+| `yarn lib:build:watch` | Build en mode watch |
+| `yarn extension:build` | Build puis packaging (`web-ext build`) dans `dist/` |
+| `yarn extension:lint` | Build puis lint du package via `web-ext lint` |
+| `yarn extension:run` | Lance Firefox avec l'extension chargée (console incluse) |
+| `yarn extension:publish` | Signe le package via `web-ext sign` |
+| `yarn extension:release` | Lint + build + publish (`scripts/publish.sh`) |
+
+## Publication automatique (CI)
+
+Le workflow `.github/workflows/publish.yml` publie automatiquement l'extension sur addons.mozilla.org à chaque push d'un tag `v*.*.*` (ou manuellement via "Run workflow" dans l'onglet Actions). Le job tourne sous l'environment GitHub `production` (protection rules configurables : reviewers requis, restriction de branches/tags). Il exécute `yarn extension:release` avec les secrets `WEB_EXT_API_KEY` et `WEB_EXT_API_SECRET` (récupérables sur [addons.mozilla.org/developers/addon/api/key](https://addons.mozilla.org/developers/addon/api/key/)) à configurer dans Settings → Environments → `production` → Environment secrets.
+
+Penser à faire correspondre le tag et la `version` de `manifest.json` avant de tagger.
