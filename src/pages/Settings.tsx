@@ -20,7 +20,7 @@ const Settings = () => {
   return (
     <form onSubmit={handleSaveApiToken}>
       <label htmlFor="circleCiApiToken">Circle CI API Token</label>
-      <input type="text" id="circleCiApiToken" value={token} onChange={handleTokenChange} />
+      <input type="password" id="circleCiApiToken" value={token} onChange={handleTokenChange} autoComplete="off" />
       <button type="submit" onClick={handleSaveApiToken}>Save</button>
     </form>
   );

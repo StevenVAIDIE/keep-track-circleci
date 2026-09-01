@@ -17,11 +17,17 @@ const IconButtonContainer = styled.button`
   height: 24px;
   cursor: ${({disabled}) => (disabled ? 'not-allowed' : 'pointer')};
   font-family: inherit;
-  transition: background-color 0.1s ease;
+  color: #5C6474;
+  transition: background-color 0.1s ease, color 0.1s ease;
   outline-style: none;
   text-decoration: none;
   white-space: nowrap;
   border-radius: 50%;
+
+  &:hover:not([disabled]) {
+    background-color: #EFF1F4;
+    color: #2B2E34;
+  }
 
   &:focus {
     box-shadow: 0 0 0 2px #BDD3E9;

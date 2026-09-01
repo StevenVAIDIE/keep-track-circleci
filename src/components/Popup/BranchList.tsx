@@ -5,21 +5,28 @@ const BranchListContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  flex-basis: 180px;
+  padding: 8px;
+  gap: 2px;
+  border-right: 1px solid #E4E7ED;
+  overflow-y: auto;
 `;
 
 const BranchItem = styled.div<{isSelected: boolean}>`
   display: flex;
   flex-direction: row;
-  padding: 10px;
-  margin: 10px;
-  color: ${({isSelected}) => isSelected ? '#9452BA': '#A1A9B7'};
-  border-left: 4px solid ${({isSelected}) => isSelected ? '#9452BA': 'transparent'};
+  padding: 8px 10px;
+  border-radius: 6px;
+  color: ${({isSelected}) => isSelected ? '#6F2DA8': '#5C6474'};
+  background-color: ${({isSelected}) => isSelected ? '#F1E6FA': 'transparent'};
+  font-weight: ${({isSelected}) => isSelected ? '600' : '400'};
   align-items: center;
   gap: 5px;
+  font-size: 13px;
 
   :hover {
     cursor: pointer;
-    border-left-color: #9452BA;
+    background-color: ${({isSelected}) => isSelected ? '#F1E6FA': '#EFF1F4'};
   }
 `;
 

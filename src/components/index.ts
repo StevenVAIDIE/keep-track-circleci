@@ -1,5 +1,6 @@
-export * from './Content/GithubApproveButton';
 export * from './Content/GithubPullRequestPage';
+export * from './Content/MonitorButton';
+export * from './Content/CircleciPipelinePage';
 export * from './Popup/BranchList';
 export * from './Popup/MonitoredPullRequest';
 export * from './Popup/PullRequestList';

@@ -28,13 +28,23 @@
       "matches": ["*://*.github.com/*"],
       "run_at": "document_idle",
       "js": ["content.js"]
+    },
+    {
+      "matches": ["*://app.circleci.com/pipelines/*"],
+      "run_at": "document_idle",
+      "js": ["content.js"]
     }
   ],
   "options_ui": {
     "page": "settings.html"
   },
+  "web_accessible_resources": [
+    "icon-48.png",
+    "icon-128.png"
+  ],
   "permissions": [
-    "https://github.com/*",
+    "*://*.github.com/*",
+    "*://app.circleci.com/*",
     "https://circleci.com/*",
     "storage",
     "alarms",

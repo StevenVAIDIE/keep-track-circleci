@@ -1,5 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {useCircleCiApi} from "./useCircleCiApi";
+import {PullRequest} from "../model";
 
 type Response = {
   workflowId: string;
@@ -8,13 +9,13 @@ type Response = {
   approval_request_id: string;
 };
 
-const useCircleCiApprovalSteps = (organisationName: string, projectName: string, branchName: string) => {
+const useCircleCiApprovalSteps = (pullRequests: PullRequest) => {
   const [approvalSteps, setApprovalSteps] = useState<Response[]>([]);
   const circleCiApi = useCircleCiApi();
 
   const fetchData = useCallback(async() => {
       const currentApprovalSteps: Response[] = [];
-      const pipeline = await circleCiApi.fetchLastPipeline(organisationName, projectName, branchName);
+      const pipeline = await circleCiApi.fetchLastPipeline(pullRequests);
       const workflows = await circleCiApi.fetchPipelineWorkflow(pipeline.id);
       for (const workflow of workflows) {
         const jobs = await circleCiApi.fetchWorkflowJobs(workflow.id);

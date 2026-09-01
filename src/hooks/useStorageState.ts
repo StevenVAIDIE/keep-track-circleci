@@ -39,7 +39,7 @@ function objectIsDifferent(a: any, b: any): boolean {
 
 const useStorageState = <StateType>(initialValue: StateType, key: string) => {
   const [value, setValue] = useState(initialValue)
-  browser.storage.sync.get(key).then(storedValue => {
+  browser.storage.local.get(key).then(storedValue => {
     if (!storedValue[key]) {
       return
     }
@@ -50,7 +50,7 @@ const useStorageState = <StateType>(initialValue: StateType, key: string) => {
   })
 
   const storageOnChange = (storedValue: any, area: string) => {
-    if ('sync' !== area) {
+    if ('local' !== area) {
       return
     }
 
@@ -64,7 +64,7 @@ const useStorageState = <StateType>(initialValue: StateType, key: string) => {
   }
 
   const changeValue = (value: StateType) => {
-    browser.storage.sync.set({
+    browser.storage.local.set({
       [key]: value
     })
   }

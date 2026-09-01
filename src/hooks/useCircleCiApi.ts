@@ -1,5 +1,6 @@
 import {useStorageState} from "./useStorageState";
-import {useCallback} from "react";
+import {useCallback, useMemo} from "react";
+import {PullRequest} from '../model'
 
 type WorkflowJobItem = {
   type: string,
@@ -19,12 +20,13 @@ type Workflow = {
 
 const useCircleCiApi = () => {
   const [circleciApiToken] = useStorageState<string>('', 'CIRCLECI_API_TOKEN');
-  const fetchLastPipeline = async(organisationName: string, projectName: string, branchName: string) => {
+
+  const fetchLastPipeline = useCallback(async(pullRequest: PullRequest) => {
     if (circleciApiToken === '') {
       return null;
     }
 
-    const url = `https://circleci.com/api/v2/project/github/${organisationName}/${projectName}/pipeline?branch=${branchName}`;
+    const url = `https://circleci.com/api/v2/project/github/${pullRequest.organisation_name}/${pullRequest.project_name}/pipeline?branch=${pullRequest.branch_name}`;
     const response = await fetch(url, {
       headers: {
         'Circle-Token': circleciApiToken,
@@ -39,9 +41,25 @@ const useCircleCiApi = () => {
     const content = await response.json();
 
     return content.items?.[0] ?? null;
-  }
+  }, [circleciApiToken]);
 
-  const fetchPipelineWorkflow = async(pipelineId: string) => {
+  const fetchPipelineByNumber = useCallback(async(organisationName: string, projectName: string, pipelineNumber: string) => {
+    if (circleciApiToken === '') {
+      return null;
+    }
+
+    const url = `https://circleci.com/api/v2/project/github/${organisationName}/${projectName}/pipeline/${pipelineNumber}`;
+    const response = await fetch(url, {
+      headers: {
+        'Circle-Token': circleciApiToken,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return response.ok ? await response.json() : null;
+  }, [circleciApiToken]);
+
+  const fetchPipelineWorkflow = useCallback(async(pipelineId: string) => {
     const url = `https://circleci.com/api/v2/pipeline/${pipelineId}/workflow`;
     const response = await fetch(url, {
       headers: {
@@ -57,7 +75,7 @@ const useCircleCiApi = () => {
     const content = await response.json();
 
     return content.items ?? [];
-  }
+  }, [circleciApiToken]);
 
   const approveStep = useCallback(async (workflowId: string, stepApprovalRequestId: string) => {
     const url = `https://circleci.com/api/v2/workflow/${workflowId}/approve/${stepApprovalRequestId}`;
@@ -96,7 +114,10 @@ const useCircleCiApi = () => {
     return response.ok ? await response.json() : null;
   }, [circleciApiToken]);
 
-  return {approveStep, fetchWorkflow, fetchWorkflowJobs, fetchLastPipeline, fetchPipelineWorkflow} as const;
+  return useMemo(
+    () => ({approveStep, fetchWorkflow, fetchWorkflowJobs, fetchLastPipeline, fetchPipelineByNumber, fetchPipelineWorkflow} as const),
+    [approveStep, fetchWorkflow, fetchWorkflowJobs, fetchLastPipeline, fetchPipelineByNumber, fetchPipelineWorkflow]
+  );
 }
 
 export {useCircleCiApi};

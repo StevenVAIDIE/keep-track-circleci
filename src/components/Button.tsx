@@ -45,15 +45,16 @@ type ButtonProps =
 const Container = styled.button`
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  flex-shrink: 0;
+  gap: 6px;
   border-width: 1px;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 400;
   text-transform: uppercase;
-  border-radius: 16px;
+  border-radius: 13px;
   border-style: solid;
-  padding: 0 15px;
-  height: 32px;
+  padding: 0 10px;
+  height: 26px;
   font-family: inherit;
   transition: background-color 0.1s ease;
   outline-style: none;

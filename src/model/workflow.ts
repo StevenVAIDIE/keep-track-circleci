@@ -1,24 +1,25 @@
-type Status = 'success' | 'running' | 'stopped' | 'failed' | 'retried';
+type Status = 'success' | 'running' | 'on_hold' | 'stopped' | 'failed' | 'retried';
+
+type Source = 'github' | 'circleci';
 
 type PullRequest = {
   id: number;
   organisation_name: string;
   project_name: string;
   branch_name: string;
+  source?: Source;
   runs: Run[]
 };
 
 type Run = {
   id: number;
-  workflow_id: string;
-  status: Status;
-  steps: Steps[];
+  workflows: WorkflowStatus[];
 };
 
-type Steps = {
-  id: number;
+type WorkflowStatus = {
+  id: string;
   name: string;
-  approval_request_id: string;
+  status: Status;
 };
 
 function groupPullRequestByBranch(pullRequests: PullRequest[]): {[branchName: string]: PullRequest[]} {
@@ -39,7 +40,8 @@ function removePullRequest(pullRequests: PullRequest[], pullRequestToRemove: Pul
     || pullRequest.branch_name !== pullRequestToRemove.branch_name
     || pullRequest.organisation_name !== pullRequestToRemove.organisation_name
     || pullRequest.project_name !== pullRequestToRemove.project_name
+    || (pullRequest.source ?? 'github') !== (pullRequestToRemove.source ?? 'github')
   );
 }
 export {groupPullRequestByBranch, removePullRequestsByBranch, removePullRequest};
-export type {PullRequest, Status}
+export type {PullRequest, Run, WorkflowStatus, Status, Source}
