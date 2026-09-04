@@ -12,13 +12,13 @@ const getCircleCiApiToken = async (): Promise<string | null> => {
 };
 
 const getPullRequestsToMonitor = async (): Promise<PullRequest[]> => {
-  const records = await browser.storage.sync.get('pull_request_to_monitor');
+  const records = await browser.storage.local.get('pull_request_to_monitor');
 
   return records['pull_request_to_monitor'] ?? [];
 };
 
 const setPullRequestsToMonitor = async (pullRequests: PullRequest[]) => {
-  await browser.storage.sync.set({'pull_request_to_monitor': pullRequests});
+  await browser.storage.local.set({'pull_request_to_monitor': pullRequests});
 };
 
 const fetchCircleCi = async (circleCiApiToken: string, url: string) => {
