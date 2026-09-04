@@ -12,7 +12,7 @@
   "scripts": {
     "extension:build": "yarn run lib:build && web-ext build --source-dir dist --artifacts-dir dist --overwrite-dest",
     "extension:lint": "yarn run lib:build && web-ext lint --source-dir dist",
-    "extension:publish": "web-ext sign --source-dir dist --channel listed",
+    "extension:publish": "web-ext sign --source-dir dist --channel unlisted",
     "extension:run": "web-ext run --source-dir dist --browser-console",
     "extension:release": "bash scripts/publish.sh",
     "lib:build": "node ./build.js",
